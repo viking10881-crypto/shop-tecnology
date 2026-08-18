@@ -7,11 +7,13 @@ import {
   useCallback,
 } from "react";
 
-const RAW_API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-const API_BASE = RAW_API_BASE.replace(/\/+$/, "");
-
 const CartContext = createContext(null);
+const STORAGE_KEY = 'delasoft-cart';
+
+const cartWithTotal = (items) => ({
+  items,
+  total: items.reduce((total, item) => total + Number(item.subtotal || 0), 0),
+});
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState(null);
@@ -20,31 +22,12 @@ export function CartProvider({ children }) {
 
   const fetchCart = useCallback(async () => {
     setLoading(true);
-    setError("");
     try {
-      const res = await fetch(`${API_BASE}/carrito/`, {
-        credentials: "include",
-      });
-
-      let data = null;
-      try {
-        data = await res.json();
-      } catch {
-        // puede venir vacío, no pasa nada
-      }
-
-      if (!res.ok) {
-        const detail =
-          (data && (data.detail || data.error)) ||
-          "Error al cargar el carrito.";
-        throw new Error(detail);
-      }
-
-      setCart(data);
-    } catch (e) {
-      console.error(e);
-      setError(e.message || "Error al cargar el carrito. Intenta de nuevo.");
-      setCart(null);
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      setCart(cartWithTotal(Array.isArray(stored) ? stored : []));
+    } catch {
+      setError('No fue posible recuperar el carrito.');
+      setCart(cartWithTotal([]));
     } finally {
       setLoading(false);
     }
@@ -54,73 +37,73 @@ export function CartProvider({ children }) {
     fetchCart();
   }, [fetchCart]);
 
-  const safeRequest = async (url, options, fallbackMessage) => {
-    try {
-      setError("");
-      const res = await fetch(url, {
-        credentials: "include",
-        ...options,
-      });
-
-      let data = null;
-      try {
-        data = await res.json();
-      } catch {
-        // si no hay JSON, data queda null
-      }
-
-      if (!res.ok) {
-        const detail =
-          (data && (data.detail || data.error)) || fallbackMessage;
-        throw new Error(detail);
-      }
-
-      // Las vistas de carrito siempre devuelven el carrito completo
-      if (data) {
-        setCart(data);
-      }
-
-      return data;
-    } catch (e) {
-      console.error(e);
-      setError(e.message || fallbackMessage);
-      throw e;
-    }
+  const save = (items) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    setCart(cartWithTotal(items));
   };
 
-  const addItem = (varianteId, cantidad = 1) =>
-    safeRequest(
-      `${API_BASE}/carrito/add/`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ variante_id: varianteId, cantidad }),
-      },
-      "No se pudo agregar el producto al carrito."
+  const addItem = (product, cantidad = 1, variant = null) => {
+    const items = cart?.items || [];
+    const id = String(product.id);
+    const variantId = variant?.id ?? null;
+    // allow null/undefined equality for variants
+    const existing = items.find(
+      (item) => item.product_id === id && (item.variante == variantId)
     );
 
-  const updateItem = (itemId, cantidad) =>
-    safeRequest(
-      `${API_BASE}/carrito/items/${itemId}/`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cantidad }),
-      },
-      "No se pudo actualizar el carrito."
+    const unitPrice = Number(
+      product.precio ?? product.price ?? product.sale_price ?? 0
     );
 
-  const removeItem = (itemId) =>
-    safeRequest(
-      `${API_BASE}/carrito/items/${itemId}/delete/`,
-      {
-        method: "DELETE",
-      },
-      "No se pudo quitar el producto del carrito."
+    const next = existing
+      ? items.map((item) =>
+          item === existing
+            ? {
+                ...item,
+                cantidad: item.cantidad + cantidad,
+                subtotal: (item.cantidad + cantidad) * item.precio,
+              }
+            : item
+        )
+      : [
+          ...items,
+          {
+            id: `${id}-${variantId ?? 'base'}`,
+            product_id: id,
+            variante: variantId,
+            nombre: product.nombre || product.name,
+            // try to show variant label if available
+            nombre_variante:
+              (variant && (variant.name || variant.nombre || `${variant.color || ''} ${variant.talla || ''}`)) ||
+              product.nombre ||
+              product.name,
+            imagen: product.imagen_principal || product.image_url || null,
+            precio: unitPrice,
+            cantidad,
+            subtotal: unitPrice * cantidad,
+          },
+        ];
+
+    save(next);
+    return Promise.resolve(cartWithTotal(next));
+  };
+
+  const updateItem = (itemId, cantidad) => {
+    const next = (cart?.items || []).map((item) =>
+      item.id === itemId ? { ...item, cantidad, subtotal: cantidad * item.precio } : item
     );
+    save(next);
+    return Promise.resolve(cartWithTotal(next));
+  };
+
+  const removeItem = (itemId) => {
+    const next = (cart?.items || []).filter((item) => item.id !== itemId);
+    save(next);
+    return Promise.resolve(cartWithTotal(next));
+  };
 
   const clearCartState = () => {
-    setCart((prev) => (prev ? { ...prev, items: [], total: 0 } : prev));
+    save([]);
   };
 
   return (

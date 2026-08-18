@@ -19,7 +19,7 @@ export default function NavBar() {
       {/* LOGO */}
       <Link href="/">
         <h1 className="text-xl font-serif tracking-wide cursor-pointer">
-          Auren
+          ShopTecnology
         </h1>
       </Link>
 

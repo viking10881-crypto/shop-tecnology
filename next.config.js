@@ -2,7 +2,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  images: {
+  images: { unoptimized: true },
+  async redirects() {
+    return [
+      {
+        source: '/favicon.ico',
+        destination: '/favicon.svg',
+        permanent: false,
+      },
+    ];
+  },
+  /*images: {
     domains: [
       'image.shutterstock.com',
       "localhost",                 // <- backend de Django
@@ -13,7 +23,7 @@ const nextConfig = {
       "brydenapparel.com",
       "res.cloudinary.com",
     ],
-  },
+  },*/
 };
 
 module.exports = nextConfig;

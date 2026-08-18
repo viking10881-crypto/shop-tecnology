@@ -37,7 +37,7 @@ export default function TriangleLoader() {
       <div className="relative flex flex-col items-center gap-1">
         <div className="w-14 h-14 rounded-full border border-neutral-900/15 bg-white/90 backdrop-blur flex items-center justify-center animate-pulse">
           <span className="text-[9px] uppercase tracking-[0.28em] text-neutral-600">
-            Auren
+            ShopTecnology
           </span>
         </div>
         {/* 🔺 Triangulito inferior */}

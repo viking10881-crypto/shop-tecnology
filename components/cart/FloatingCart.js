@@ -32,7 +32,7 @@ export default function FloatingCart() {
           <div className="px-4 py-3 flex items-center justify-between border-b border-neutral-200">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em]">
               <FiShoppingBag className="text-neutral-600" />
-              <span>Carrito Auren</span>
+              <span>Carrito ShopTecnology</span>
             </div>
             <button
               type="button"
@@ -64,7 +64,7 @@ export default function FloatingCart() {
 
             {!loading && !error && items.length === 0 && (
               <p className="text-xs text-neutral-500">
-                Tu selección está vacía. Empieza explorando la colección.
+                Tu carrito está vacío. Explora nuestros productos tecnológicos.
               </p>
             )}
 

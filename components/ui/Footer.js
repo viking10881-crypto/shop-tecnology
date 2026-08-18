@@ -10,10 +10,10 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-neutral-400">
-              Auren.
+              ShopTecnology
             </p>
             <p className="text-[11px] text-neutral-500 mt-1">
-              Ropa minimalista, producciones limitadas y lujo silencioso.
+              Tecnología, audio y accesorios para mantenerte siempre conectado.
             </p>
           </div>
 
@@ -22,7 +22,7 @@ export default function Footer() {
               href="/producto"
               className="hover:text-neutral-300 transition-colors"
             >
-              Colección
+              Productos
             </Link>
             <Link
               href="/nosotros"
@@ -42,7 +42,7 @@ export default function Footer() {
         {/* Línea inferior: legal */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-3 border-t border-neutral-900">
           <span className="text-neutral-600">
-            © {new Date().getFullYear()} Auren. Todos los derechos reservados.
+            © {new Date().getFullYear()} ShopTecnology. Todos los derechos reservados.
           </span>
 
           <div className="flex flex-wrap gap-4 uppercase tracking-[0.22em]">

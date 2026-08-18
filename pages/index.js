@@ -1,16 +1,18 @@
-import Link from "next/link";
-import { motion } from "framer-motion";
+'use client'
+
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 const container = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: "easeOut" },
+    transition: { duration: 0.8, ease: 'easeOut' },
   },
-};
+}
 
-export default function HomeHero() {
+export default function Home() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-black text-white">
       <motion.section
@@ -28,20 +30,22 @@ export default function HomeHero() {
         </h1>
 
         <p className="mx-auto max-w-md text-sm md:text-base text-zinc-400">
-          Celulares, audio, energía y accesorios para estar siempre conectado.
+          Tecnología que te acompaña todos los días: audio, energía y accesorios
+          para tus dispositivos.
         </p>
 
         <div className="pt-4">
-          <Link href="/inicio">
+          <Link href="/inicio" className="inline-block">
             <button
               className="rounded-full border border-white/70 px-8 py-2 text-xs md:text-sm uppercase tracking-[0.25em]
-              hover:bg-white hover:text-black transition-all duration-300"
+                         hover:bg-white hover:text-black transition-all duration-300"
             >
-              Entrar a nuestro universo
+              Explorar tecnología
             </button>
           </Link>
         </div>
       </motion.section>
     </main>
-  );
+  )
 }
+
