@@ -30,9 +30,17 @@ function ConfiguracionPage() {
       {/* Tarjeta perfil resumida */}
       <Link href="/usuario/cuenta">
         <div className="mt-2 bg-neutral-900/60 border border-neutral-800 rounded-2xl p-5 flex items-center gap-5 hover:bg-neutral-900 transition-all cursor-pointer">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 border border-neutral-700 text-lg font-semibold">
-            {initials(fullName)}
-          </div>
+          {user?.avatar_url ? (
+            <img
+              src={user.avatar_url}
+              alt="Foto de perfil"
+              className="w-16 h-16 rounded-full object-cover border border-neutral-700"
+            />
+          ) : (
+            <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 border border-neutral-700 text-lg font-semibold">
+              {initials(fullName)}
+            </div>
+          )}
 
           <div className="flex-1">
             <h2 className="text-lg font-semibold tracking-wide">{fullName}</h2>

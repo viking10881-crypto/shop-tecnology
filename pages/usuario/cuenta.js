@@ -29,9 +29,17 @@ function CuentaPage() {
     >
       {/* TARJETA PERFIL */}
       <section className="bg-neutral-900/60 border border-neutral-800 rounded-2xl px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-5 mb-10">
-        <div className="w-24 h-24 rounded-full flex items-center justify-center bg-white/10 border border-neutral-700 text-2xl font-semibold mx-auto sm:mx-0">
-          {initials(fullName)}
-        </div>
+        {user?.avatar_url ? (
+          <img
+            src={user.avatar_url}
+            alt="Foto de perfil"
+            className="w-24 h-24 rounded-full object-cover border border-neutral-700 mx-auto sm:mx-0"
+          />
+        ) : (
+          <div className="w-24 h-24 rounded-full flex items-center justify-center bg-white/10 border border-neutral-700 text-2xl font-semibold mx-auto sm:mx-0">
+            {initials(fullName)}
+          </div>
+        )}
 
         <div className="flex-1 text-center sm:text-left space-y-1">
           <h2 className="text-xl font-semibold">{fullName}</h2>

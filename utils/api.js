@@ -66,12 +66,26 @@ export async function fetchMyProfile(token) {
   return request('/auth/profile', { headers: authHeaders(token) });
 }
 
-export async function updateMyProfile(token, { name, phone, city, address }) {
+export async function updateMyProfile(token, { name, phone, city, address, avatar_url, avatar_public_id }) {
   return request('/auth/profile', {
     method: 'PUT',
     headers: authHeaders(token),
-    body: JSON.stringify({ name, phone, city, address }),
+    body: JSON.stringify({ name, phone, city, address, avatar_url, avatar_public_id }),
   });
+}
+
+export async function uploadMyAvatar(token, file) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const res = await fetch('/api/delasoft/upload', {
+    method: 'POST',
+    headers: authHeaders(token),
+    body: formData,
+  });
+  const payload = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(payload?.message || 'No fue posible subir la imagen.');
+  return unwrap(payload);
 }
 
 export async function fetchMyOrders(token) {

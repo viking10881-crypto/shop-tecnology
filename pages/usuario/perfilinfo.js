@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import withAuth from "../../utils/withAuth";
 import { useAuth } from "@/components/contexts/AuthContext";
 import EditFieldModal from "./EditFieldModal";
-import { Save } from "lucide-react";
-import { updateMyProfile } from "@/utils/api";
+import { Save, Camera } from "lucide-react";
+import { updateMyProfile, uploadMyAvatar } from "@/utils/api";
 import AccountLayout from "@/components/layouts/AccountLayout";
+
+const MAX_IMAGE_SIZE_MB = 3;
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 function initials(name) {
   if (!name) return "U";
@@ -33,6 +36,7 @@ function PerfilInfo() {
 
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState("");
+  const [subiendoFoto, setSubiendoFoto] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -54,6 +58,47 @@ function PerfilInfo() {
   const saveField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
     setModalOpen(false);
+  };
+
+  const handleFotoChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = "";
+
+    setMensaje("");
+
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setMensaje("❌ Solo se permiten imágenes JPG, PNG o WEBP.");
+      return;
+    }
+
+    const sizeMb = file.size / (1024 * 1024);
+    if (sizeMb > MAX_IMAGE_SIZE_MB) {
+      setMensaje(`❌ La imagen supera los ${MAX_IMAGE_SIZE_MB}MB permitidos.`);
+      return;
+    }
+
+    if (!user?.token) {
+      setMensaje("❌ Tu sesión expiró, vuelve a iniciar sesión.");
+      return;
+    }
+
+    setSubiendoFoto(true);
+    try {
+      const { url, public_id } = await uploadMyAvatar(user.token, file);
+      const updated = await updateMyProfile(user.token, {
+        ...form,
+        avatar_url: url,
+        avatar_public_id: public_id,
+      });
+      updateUser(updated);
+      setMensaje("✔️ Foto de perfil actualizada.");
+    } catch (error) {
+      console.error(error);
+      setMensaje(`❌ ${error.message || "No fue posible subir la foto."}`);
+    } finally {
+      setSubiendoFoto(false);
+    }
   };
 
   const guardarCambios = async () => {
@@ -115,8 +160,29 @@ function PerfilInfo() {
     >
       {/* Card de perfil */}
       <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl flex flex-col sm:flex-row items-center w-full p-6 mb-8 gap-6">
-        <div className="w-24 h-24 rounded-full flex items-center justify-center bg-white/10 border border-white/15 text-2xl font-semibold text-white flex-shrink-0">
-          {initials(form.name || user.name)}
+        <div className="relative w-24 h-24 rounded-full flex-shrink-0">
+          {user.avatar_url ? (
+            <img
+              src={user.avatar_url}
+              alt="Foto de perfil"
+              className="w-full h-full rounded-full object-cover border border-white/15"
+            />
+          ) : (
+            <div className="w-full h-full rounded-full flex items-center justify-center bg-white/10 border border-white/15 text-2xl font-semibold text-white">
+              {initials(form.name || user.name)}
+            </div>
+          )}
+
+          <label className="absolute bottom-0 right-0 bg-black/70 hover:bg-black/90 p-1.5 rounded-full transition cursor-pointer flex items-center justify-center border border-white/30">
+            <Camera size={14} className="text-white" />
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="hidden"
+              onChange={handleFotoChange}
+              disabled={subiendoFoto}
+            />
+          </label>
         </div>
 
         <div className="flex flex-col gap-1 text-center sm:text-left">
