@@ -51,3 +51,11 @@ export async function createSale(payload) {
 export async function registerCustomer(payload) {
   return request('/auth/register', { method: 'POST', body: JSON.stringify(payload) });
 }
+
+export async function verifyEmail(email, code) {
+  return request('/auth/verify', { method: 'POST', body: JSON.stringify({ email, code }) });
+}
+
+export async function resendVerificationCode(email) {
+  return request('/auth/resend-code', { method: 'POST', body: JSON.stringify({ email }) });
+}

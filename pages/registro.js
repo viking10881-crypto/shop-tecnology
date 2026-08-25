@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { registerCustomer } from "@/utils/api";
 
 export default function Registro() {
+  const router = useRouter();
 
   const [form, setForm] = useState({
     first_name: "",
@@ -40,6 +42,9 @@ export default function Registro() {
         password: form.password,
       });
       setSuccess(data?.message || "Cuenta creada. Revisa tu correo para verificarla.");
+      setTimeout(() => {
+        router.push(`/confirmar-email?email=${encodeURIComponent(form.email.trim())}`);
+      }, 1800);
     } catch (err) {
       setError(err.message || "No fue posible crear la cuenta.");
     }

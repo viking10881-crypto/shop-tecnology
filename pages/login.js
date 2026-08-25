@@ -17,8 +17,8 @@ export default function Login() {
     try {
       await login(username, password);
       router.push("/inicio");
-    } catch {
-      setError("Credenciales incorrectas.");
+    } catch (err) {
+      setError(err.message || "Credenciales incorrectas.");
     }
   };
 
