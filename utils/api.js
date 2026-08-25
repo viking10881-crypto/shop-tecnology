@@ -59,3 +59,26 @@ export async function verifyEmail(email, code) {
 export async function resendVerificationCode(email) {
   return request('/auth/resend-code', { method: 'POST', body: JSON.stringify({ email }) });
 }
+
+const authHeaders = (token) => ({ Authorization: `Bearer ${token}` });
+
+export async function fetchMyProfile(token) {
+  return request('/auth/profile', { headers: authHeaders(token) });
+}
+
+export async function updateMyProfile(token, { name, phone, city, address }) {
+  return request('/auth/profile', {
+    method: 'PUT',
+    headers: authHeaders(token),
+    body: JSON.stringify({ name, phone, city, address }),
+  });
+}
+
+export async function fetchMyOrders(token) {
+  return request('/sales/user/history', { headers: authHeaders(token) });
+}
+
+export async function fetchMyOrderStats(token) {
+  const payload = await request('/sales/user/stats', { headers: authHeaders(token) });
+  return payload?.summary ?? payload;
+}

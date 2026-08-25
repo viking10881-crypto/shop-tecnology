@@ -5,12 +5,20 @@ import withAuth from "../../utils/withAuth";
 import { useAuth } from "@/components/contexts/AuthContext";
 import AccountLayout from "@/components/layouts/AccountLayout";
 
+function initials(name) {
+  if (!name) return "U";
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
+}
+
 function ConfiguracionPage() {
   const { user } = useAuth();
 
-  const fullName = `${user?.first_name || "Usuario"} ${
-    user?.last_name || ""
-  }`.trim();
+  const fullName = user?.name || "Usuario";
 
   return (
     <AccountLayout
@@ -22,11 +30,9 @@ function ConfiguracionPage() {
       {/* Tarjeta perfil resumida */}
       <Link href="/usuario/cuenta">
         <div className="mt-2 bg-neutral-900/60 border border-neutral-800 rounded-2xl p-5 flex items-center gap-5 hover:bg-neutral-900 transition-all cursor-pointer">
-          <img
-            src={user?.perfil?.foto || "/img/profile.jpg"}
-            alt="perfil"
-            className="w-16 h-16 rounded-full object-cover border border-neutral-700"
-          />
+          <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 border border-neutral-700 text-lg font-semibold">
+            {initials(fullName)}
+          </div>
 
           <div className="flex-1">
             <h2 className="text-lg font-semibold tracking-wide">{fullName}</h2>
@@ -49,7 +55,6 @@ function ConfiguracionPage() {
 
           <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl divide-y divide-neutral-800">
             <ConfigItem href="/pedidos" label="Tus pedidos" />
-            <ConfigItem href="/favoritos" label="Favoritos" />
             <ConfigItem href="/carrito" label="Carrito" />
           </div>
         </div>

@@ -56,12 +56,21 @@ export const AuthProvider = ({ children }) => {
       throw new Error(msg);
     }
 
-    // Delasoft may return { success, data: { ... } }
-    const user = payload?.data || payload || { email: username };
-    // store lightweight session locally
-    localStorage.setItem("shoptecnology-user", JSON.stringify(user));
-    setUser(user);
-    return user;
+    // Delasoft responde { success, message, user: {...}, token, refreshToken }
+    const profile = payload?.user || payload?.data || { email: username };
+    const session = { ...profile, token: payload?.token || null };
+    // store lightweight session locally (incluye el JWT para llamadas autenticadas)
+    localStorage.setItem("shoptecnology-user", JSON.stringify(session));
+    setUser(session);
+    return session;
+  };
+
+  const updateUser = (patch) => {
+    setUser((current) => {
+      const next = { ...current, ...patch };
+      localStorage.setItem("shoptecnology-user", JSON.stringify(next));
+      return next;
+    });
   };
 
   const logout = () => {
@@ -89,6 +98,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         refreshUser,
         registerLocal,
+        updateUser,
       }}
     >
       {children}
