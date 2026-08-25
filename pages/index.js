@@ -1,24 +1,9 @@
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-
-const container = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: 'easeOut' },
-  },
-}
 
 export default function Home() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-black text-white">
-      <motion.section
-        initial="hidden"
-        animate="visible"
-        variants={container}
-        className="text-center space-y-6 px-4"
-      >
+      <section className="text-center space-y-6 px-4 animate-fade-in-up">
         <p className="tracking-[0.3em] text-xs uppercase text-zinc-400">
           Bienvenido a
         </p>
@@ -42,7 +27,7 @@ export default function Home() {
             </button>
           </Link>
         </div>
-      </motion.section>
+      </section>
     </main>
   )
 }
