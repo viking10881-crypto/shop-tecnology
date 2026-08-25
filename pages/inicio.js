@@ -345,7 +345,7 @@ export default function Inicio({ colecciones = [], banners = [], manifesto = nul
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     const [bannersData, categoriesData] = await Promise.all([
       delasoftFetch('/banners'),
@@ -375,6 +375,7 @@ export async function getServerSideProps() {
         manifesto: null,
         colecciones,
       },
+      revalidate: 60,
     };
   } catch (error) {
     console.error("Error cargando home:", error);

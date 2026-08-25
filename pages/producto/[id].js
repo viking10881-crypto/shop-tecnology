@@ -158,12 +158,12 @@ export default function ProductoDetalle() {
     setMensajeCarrito("");
     setErrorCarrito("");
 
-    if (!varianteSeleccionada?.id) {
+    if (variantes.length > 0 && !varianteSeleccionada?.id) {
       setErrorCarrito("Selecciona una variante antes de agregar al carrito.");
       return;
     }
 
-    if (tallasDisponibles.length > 0 && !varianteSeleccionada.talla) {
+    if (tallasDisponibles.length > 0 && !varianteSeleccionada?.talla) {
       setErrorCarrito("Selecciona una talla antes de continuar.");
       return;
     }
@@ -206,7 +206,7 @@ export default function ProductoDetalle() {
     );
   }
 
-  const botonDeshabilitado = !varianteSeleccionada || agregando;
+  const botonDeshabilitado = (variantes.length > 0 && !varianteSeleccionada) || agregando;
 
   return (
     <StoreLayout backHref="/producto" backLabel="Volver a productos">
