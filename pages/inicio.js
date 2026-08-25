@@ -122,8 +122,6 @@ export default function Inicio({ colecciones = [], banners = [], manifesto = nul
       };
     }, [slug, imageSrc]);
 
-    const fallback = "https://res.cloudinary.com/dagyxjcjk/image/upload/v1234567890/placeholder.jpg";
-
     return imageSrc ? (
       <Image src={imageSrc} alt={alt || slug} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
     ) : (
@@ -365,7 +363,7 @@ export async function getStaticProps() {
         nombre: category.name || category.nombre || category.slug,
         descripcion:
           category.description || category.descripcion || `${category.product_count || category.product_count || 0} productos disponibles`,
-        imagen_portada: imagen_portada || "https://res.cloudinary.com/dagyxjcjk/image/upload/v1234567890/placeholder.jpg",
+        imagen_portada: imagen_portada || null,
       };
     });
 

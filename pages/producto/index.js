@@ -50,12 +50,7 @@ export default function ProductosPage() {
         producto.variantes[0].imagenes_secundarias?.[0]?.imagen;
     }
 
-    // 3. Placeholder
-    if (!imagen) {
-      imagen = "/placeholder.jpg";
-    }
-
-    // 4. Asegurar URL absoluta si viene como path relativo
+    // 3. Asegurar URL absoluta si viene como path relativo
     if (imagen && !imagen.startsWith("http")) {
       if (!imagen.startsWith("/")) {
         imagen = `/${imagen}`;
@@ -200,11 +195,15 @@ export default function ProductosPage() {
                     <a className="group bg-neutral-900 rounded-2xl overflow-hidden flex flex-col h-[480px] border border-white/10 hover:border-white/30 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(255,255,255,0.08)] transition-all duration-300">
                       {/* Imagen */}
                       <div className="relative h-[60%] bg-neutral-900 flex items-center justify-center overflow-hidden">
-                        <img
-                          src={imagen}
-                          alt={producto.nombre}
-                          className="object-contain h-full w-full px-4 py-4 group-hover:scale-105 transition-transform duration-300"
-                        />
+                        {imagen ? (
+                          <img
+                            src={imagen}
+                            alt={producto.nombre}
+                            className="object-contain h-full w-full px-4 py-4 group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <span className="text-xs text-neutral-600">Sin imagen</span>
+                        )}
                         <span className="absolute top-4 left-4 text-[0.65rem] uppercase tracking-wide bg-white text-black px-3 py-1 rounded-full">
                           New
                         </span>
