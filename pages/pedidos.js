@@ -46,7 +46,7 @@ const formatearPrecio = (valor) => {
 };
 
 function Pedidos() {
-  const { user } = useAuth();
+  const { user, getToken } = useAuth();
 
   const [pedidos, setPedidos] = useState([]);
   const [stats, setStats] = useState(null);
@@ -58,15 +58,16 @@ function Pedidos() {
   const [orden, setOrden] = useState("recientes"); // recientes | antiguos
 
   const fetchPedidos = useCallback(async () => {
-    if (!user?.token) return;
+    if (!user) return;
 
     try {
       setCargando(true);
       setError("");
 
+      const token = await getToken();
       const [orders, summary] = await Promise.all([
-        fetchMyOrders(user.token),
-        fetchMyOrderStats(user.token).catch(() => null),
+        fetchMyOrders(token),
+        fetchMyOrderStats(token).catch(() => null),
       ]);
 
       setPedidos(Array.isArray(orders) ? orders : []);
@@ -78,7 +79,8 @@ function Pedidos() {
     } finally {
       setCargando(false);
     }
-  }, [user?.token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     fetchPedidos();

@@ -21,7 +21,7 @@ function initials(name) {
 }
 
 function PerfilInfo() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, getToken } = useAuth();
 
   const [form, setForm] = useState({
     name: "",
@@ -78,15 +78,11 @@ function PerfilInfo() {
       return;
     }
 
-    if (!user?.token) {
-      setMensaje("❌ Tu sesión expiró, vuelve a iniciar sesión.");
-      return;
-    }
-
     setSubiendoFoto(true);
     try {
-      const { url, public_id } = await uploadMyAvatar(user.token, file);
-      const updated = await updateMyProfile(user.token, {
+      const token = await getToken();
+      const { url, public_id } = await uploadMyAvatar(token, file);
+      const updated = await updateMyProfile(token, {
         ...form,
         avatar_url: url,
         avatar_public_id: public_id,
@@ -102,11 +98,6 @@ function PerfilInfo() {
   };
 
   const guardarCambios = async () => {
-    if (!user?.token) {
-      setMensaje("❌ Tu sesión expiró, vuelve a iniciar sesión.");
-      return;
-    }
-
     if (!form.name.trim()) {
       setMensaje("❌ El nombre es obligatorio.");
       return;
@@ -116,7 +107,8 @@ function PerfilInfo() {
     setMensaje("");
 
     try {
-      const updated = await updateMyProfile(user.token, form);
+      const token = await getToken();
+      const updated = await updateMyProfile(token, form);
       updateUser(updated);
       setMensaje("✔️ Datos guardados correctamente.");
     } catch (error) {

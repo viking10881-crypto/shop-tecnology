@@ -3,6 +3,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
+function isTokenExpired(token, bufferSeconds = 30) {
+  if (!token) return true;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    if (!payload?.exp) return false;
+    return Date.now() >= payload.exp * 1000 - bufferSeconds * 1000;
+  } catch {
+    return true;
+  }
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -58,11 +69,53 @@ export const AuthProvider = ({ children }) => {
 
     // Delasoft responde { success, message, user: {...}, token, refreshToken }
     const profile = payload?.user || payload?.data || { email: username };
-    const session = { ...profile, token: payload?.token || null };
+    const session = {
+      ...profile,
+      token: payload?.token || null,
+      refreshToken: payload?.refreshToken || null,
+    };
     // store lightweight session locally (incluye el JWT para llamadas autenticadas)
     localStorage.setItem("shoptecnology-user", JSON.stringify(session));
     setUser(session);
     return session;
+  };
+
+  // El access token dura 15 min. refreshAccessToken() lo renueva con el
+  // refreshToken (dura 7 dias) sin pedirle contraseña de nuevo al usuario.
+  const refreshAccessToken = async () => {
+    const current = JSON.parse(localStorage.getItem("shoptecnology-user") || "null");
+    if (!current?.refreshToken) {
+      throw new Error("Tu sesión expiró, vuelve a iniciar sesión.");
+    }
+
+    const res = await fetch("/api/delasoft/auth/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken: current.refreshToken }),
+    });
+    const payload = await res.json().catch(() => null);
+
+    if (!res.ok || !payload?.data?.accessToken) {
+      localStorage.removeItem("shoptecnology-user");
+      setUser(null);
+      throw new Error(payload?.message || "Tu sesión expiró, vuelve a iniciar sesión.");
+    }
+
+    const next = { ...current, token: payload.data.accessToken };
+    localStorage.setItem("shoptecnology-user", JSON.stringify(next));
+    setUser(next);
+    return next.token;
+  };
+
+  // Llamalo antes de cualquier fetch autenticado en vez de leer user.token
+  // directo: renueva el token solo si ya esta vencido o a punto de vencer.
+  const getToken = async () => {
+    const current = JSON.parse(localStorage.getItem("shoptecnology-user") || "null");
+    if (!current?.token) {
+      throw new Error("Tu sesión expiró, vuelve a iniciar sesión.");
+    }
+    if (!isTokenExpired(current.token)) return current.token;
+    return refreshAccessToken();
   };
 
   const updateUser = (patch) => {
@@ -99,6 +152,7 @@ export const AuthProvider = ({ children }) => {
         refreshUser,
         registerLocal,
         updateUser,
+        getToken,
       }}
     >
       {children}

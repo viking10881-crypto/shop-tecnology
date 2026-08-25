@@ -4,7 +4,7 @@ const READ_RESOURCES = new Set([
   'ping', 'products', 'categories', 'inventory', 'banners', 'discounts', 'customers',
   'auth/profile', 'sales/user/history', 'sales/user/stats',
 ]);
-const WRITE_RESOURCES = new Set(['sales', 'discounts/validate', 'auth/register', 'auth/login', 'auth/verify', 'auth/resend-code']);
+const WRITE_RESOURCES = new Set(['sales', 'discounts/validate', 'auth/register', 'auth/login', 'auth/verify', 'auth/resend-code', 'auth/refresh']);
 const UPDATE_RESOURCES = new Set(['auth/profile']);
 
 export default async function handler(req, res) {
