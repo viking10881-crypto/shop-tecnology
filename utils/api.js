@@ -23,8 +23,8 @@ export const normalizeProduct = (product = {}) => ({
 
 async function request(path, options = {}) {
   const res = await fetch(`${API}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options,
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
   });
   const payload = await res.json().catch(() => null);
   if (!res.ok) throw new Error(payload?.message || 'No fue posible cargar los datos de Delasoft.');
