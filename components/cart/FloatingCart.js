@@ -156,12 +156,12 @@ export default function FloatingCart() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="group relative flex items-center gap-2 rounded-full border border-white/10 bg-neutral-900/50 backdrop-blur-2xl backdrop-saturate-150 px-4 py-2.5 shadow-xl shadow-black/40 hover:-translate-y-0.5 hover:border-white/20 transition"
+        className="group relative flex items-center gap-2 rounded-full border border-white/10 bg-neutral-900/50 backdrop-blur-2xl backdrop-saturate-150 px-3 sm:px-4 py-2.5 shadow-xl shadow-black/40 hover:-translate-y-0.5 hover:border-white/20 transition max-w-[calc(100vw-2rem)]"
       >
         {/* Triangulito debajo */}
         <div className="absolute -bottom-1.5 right-6 w-3 h-3 bg-neutral-900/80 border-r border-b border-white/10 rotate-45 group-hover:translate-y-0.5 transition" />
 
-        <div className="relative">
+        <div className="relative shrink-0">
           <FiShoppingBag className="text-neutral-200" />
           {itemCount > 0 && (
             <span className="absolute -top-2 -right-2 flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-white text-neutral-900 text-[9px] font-bold">
@@ -170,11 +170,11 @@ export default function FloatingCart() {
           )}
         </div>
 
-        <div className="flex flex-col items-start">
+        <div className="hidden sm:flex flex-col items-start min-w-0">
           <span className="text-[10px] uppercase tracking-[0.2em] text-neutral-500">
             Carrito
           </span>
-          <span className="text-xs text-neutral-100">
+          <span className="text-xs text-neutral-100 truncate max-w-[160px]">
             {loading
               ? "Cargando…"
               : error
@@ -185,9 +185,9 @@ export default function FloatingCart() {
           </span>
         </div>
         {open ? (
-          <FiChevronDown className="text-neutral-400" />
+          <FiChevronDown className="text-neutral-400 shrink-0" />
         ) : (
-          <FiChevronUp className="text-neutral-400" />
+          <FiChevronUp className="text-neutral-400 shrink-0" />
         )}
       </button>
     </div>
