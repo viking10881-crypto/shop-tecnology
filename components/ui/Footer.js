@@ -36,6 +36,12 @@ export default function Footer() {
             >
               Ayuda
             </Link>
+            <Link
+              href="/contacto"
+              className="hover:text-neutral-300 transition-colors"
+            >
+              Contacto
+            </Link>
           </div>
         </div>
 
