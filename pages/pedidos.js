@@ -20,9 +20,12 @@ const ESTADO_LABELS = {
 };
 
 const ESTADO_COLORS = {
-  pending: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40",
-  paid: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
-  partial: "bg-blue-500/20 text-blue-300 border-blue-500/40",
+  pending:
+    "bg-yellow-100 text-yellow-800 border-yellow-400/40 dark:bg-yellow-500/20 dark:text-yellow-300",
+  paid:
+    "bg-emerald-100 text-emerald-800 border-emerald-400/40 dark:bg-emerald-500/20 dark:text-emerald-300",
+  partial:
+    "bg-blue-100 text-blue-800 border-blue-400/40 dark:bg-blue-500/20 dark:text-blue-300",
 };
 
 const formatearFecha = (isoString) => {
@@ -135,7 +138,7 @@ function Pedidos() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="bg-red-500/10 border border-red-500/40 rounded-2xl px-6 py-5 max-w-md text-center">
-          <p className="text-red-300 mb-2">{error}</p>
+          <p className="text-red-600 dark:text-red-300 mb-2">{error}</p>
           <button
             onClick={fetchPedidos}
             className="mt-2 text-sm px-4 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/40"

@@ -197,7 +197,7 @@ export default function ProductoDetalle() {
       <StoreLayout backHref="/producto" backLabel="Volver a productos">
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="bg-red-500/10 border border-red-500/40 rounded-2xl px-6 py-5 max-w-md text-center">
-            <p className="text-red-300 mb-2">
+            <p className="text-red-600 dark:text-red-300 mb-2">
               {error || "Producto no encontrado."}
             </p>
           </div>

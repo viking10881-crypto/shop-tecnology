@@ -1,10 +1,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/contexts/AuthContext";
-import { Menu, X } from "lucide-react";
+import { useTheme } from "@/components/contexts/ThemeContext";
+import { Menu, X, Sun, Moon } from "lucide-react";
 
 export default function NavBar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -63,14 +65,27 @@ export default function NavBar() {
           )}
         </ul>
 
-        {/* ICONO DE MENÚ PARA DISPOSITIVOS MÓVILES */}
-        <button
-          onClick={toggleMenu}
-          className="lg:hidden -mr-2 p-2 text-white"
-          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-1 sm:gap-2">
+          {/* TOGGLE MODO CLARO / OSCURO */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full text-neutral-300 hover:text-white hover:bg-white/10 transition"
+            aria-label={
+              theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"
+            }
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
+          {/* ICONO DE MENÚ PARA DISPOSITIVOS MÓVILES */}
+          <button
+            onClick={toggleMenu}
+            className="lg:hidden -mr-2 p-2 text-white"
+            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* MENÚ DESPLEGABLE — mobile / tablet */}

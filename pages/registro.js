@@ -51,7 +51,7 @@ export default function Registro() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2937_0,_#030712_42rem,_#000_100%)] text-white px-4 py-28 sm:px-6 sm:py-32">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#f4f4f5_0,_#ffffff_42rem,_#fafafa_100%)] dark:bg-[radial-gradient(circle_at_top,_#1f2937_0,_#030712_42rem,_#000_100%)] text-white px-4 py-28 sm:px-6 sm:py-32">
       <div className="mx-auto w-full max-w-2xl rounded-3xl border border-white/10 bg-black/70 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-10">
         <div className="mb-8 text-center">
           <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">ShopTecnology</p>

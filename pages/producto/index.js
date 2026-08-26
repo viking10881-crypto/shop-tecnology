@@ -121,7 +121,7 @@ export default function ProductosPage() {
     return (
       <div className="bg-black text-white min-h-screen flex items-center justify-center">
         <div className="bg-red-500/10 border border-red-500/40 rounded-2xl px-6 py-5 max-w-md text-center">
-          <p className="text-red-300 mb-2">{error}</p>
+          <p className="text-red-600 dark:text-red-300 mb-2">{error}</p>
           <button
             onClick={() => location.reload()}
             className="mt-2 text-sm px-4 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/30 border border-red-500/40"
