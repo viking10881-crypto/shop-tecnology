@@ -39,10 +39,10 @@ export default function ResetPasswordConfirm() {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen flex items-center justify-center px-6">
+    <div className="bg-black text-white min-h-screen flex items-center justify-center px-4 sm:px-6">
       <form
         onSubmit={cambiar}
-        className="max-w-md w-full border border-neutral-800 p-10 bg-black/60 backdrop-blur-xl"
+        className="max-w-md w-full border border-neutral-800 p-6 sm:p-10 bg-black/60 backdrop-blur-xl"
       >
         <h1 className="text-3xl font-serif mb-6 tracking-wide text-center">
           Cambiar contraseña

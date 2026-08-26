@@ -215,13 +215,13 @@ export default function ProductoDetalle() {
         {/* Galería */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 bg-neutral-900/80 rounded-2xl p-6 border border-white/10 shadow-[0_0_80px_rgba(255,255,255,0.05)] backdrop-blur">
           {/* Thumbnails */}
-          <div className="flex md:flex-col gap-3 order-2 md:order-1">
+          <div className="flex md:flex-col gap-3 order-2 md:order-1 overflow-x-auto md:overflow-visible max-w-full pb-1 md:pb-0">
             {imagenesGaleria.map((src, idx) => (
               <img
                 key={idx}
                 src={src}
                 alt={`Miniatura ${idx}`}
-                className={`w-20 h-20 object-cover rounded-md cursor-pointer border-2 transition ${
+                className={`w-20 h-20 shrink-0 object-cover rounded-md cursor-pointer border-2 transition ${
                   imagenSeleccionada === src
                     ? "border-white"
                     : "border-transparent hover:opacity-80"
@@ -395,7 +395,7 @@ export default function ProductoDetalle() {
           </p>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {sugeridos.map((item) => {
             const imagenCard =
               normalizarImagen(item.imagen_principal) ||

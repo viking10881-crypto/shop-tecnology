@@ -44,8 +44,8 @@ export default function ConfirmarEmail() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen flex items-center justify-center px-6">
-      <div className="p-10 border border-neutral-700 bg-black/60 backdrop-blur-xl max-w-md w-full">
+    <div className="bg-black text-white min-h-screen flex items-center justify-center px-4 sm:px-6">
+      <div className="p-6 sm:p-10 border border-neutral-700 bg-black/60 backdrop-blur-xl max-w-md w-full">
         <h1 className="text-2xl font-serif mb-2 text-center">Confirma tu cuenta</h1>
         <p className="text-sm text-neutral-400 text-center mb-6">
           Ingresa el código que enviamos a tu correo.

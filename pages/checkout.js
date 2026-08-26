@@ -1,7 +1,5 @@
 // Frontend/pages/checkout.js
 import { useEffect, useState } from "react";
-import NavBar from "@/components/ui/NavBar";
-import Footer from "@/components/ui/Footer";
 import { useCart } from "@/components/contexts/CartContext";
 import { createSale } from "@/utils/api";
 
@@ -274,11 +272,9 @@ export default function CheckoutPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black text-neutral-50 flex flex-col">
-        <NavBar />
         <main className="flex-1 pt-24 flex items-center justify-center">
           <p className="text-neutral-400 text-sm">Cargando carrito...</p>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -286,13 +282,11 @@ export default function CheckoutPage() {
   if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
     return (
       <div className="min-h-screen bg-black text-neutral-50 flex flex-col">
-        <NavBar />
         <main className="flex-1 pt-24 flex flex-col items-center justify-center px-6">
           <p className="text-neutral-300 mb-4 text-center">
             Tu carrito está vacío. Agrega piezas antes de continuar al checkout.
           </p>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -308,8 +302,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-black text-neutral-50 flex flex-col">
-      <NavBar />
-
       <main className="flex-1 pt-24 pb-16 px-6 md:px-10">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.6fr_1.2fr] gap-10">
           {/* Datos del cliente / envío */}
@@ -584,8 +576,6 @@ export default function CheckoutPage() {
           </aside>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

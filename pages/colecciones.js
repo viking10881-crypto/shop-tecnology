@@ -2,8 +2,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { fetchCategories, fetchProducts } from "@/utils/api";
-import NavBar from "@/components/ui/NavBar";
-import Footer from "@/components/ui/Footer";
 
 
 export default function ColeccionesPage() {
@@ -109,8 +107,6 @@ export default function ColeccionesPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <NavBar />
-
       <main className="flex-1 pt-24 pb-16 px-6 md:px-10 max-w-6xl mx-auto">
         {/* HEADER */}
         {!slugSeleccionado && (
@@ -262,8 +258,6 @@ export default function ColeccionesPage() {
           </section>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 }

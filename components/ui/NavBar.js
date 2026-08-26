@@ -1,74 +1,126 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/contexts/AuthContext";
-import { Menu, X } from "lucide-react";  // Usamos los íconos de Menu y X
+import { Menu, X } from "lucide-react";
 
 export default function NavBar() {
   const { user, logout } = useAuth();
-  
-  // Estado para controlar la visibilidad del menú en pantallas pequeñas
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Función para alternar el menú
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen((v) => !v);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  const links = [
+    { href: "/", label: "Inicio" },
+    { href: "/producto", label: "Productos" },
+    { href: "/nosotros", label: "Sobre Nosotros" },
+    { href: "/contacto", label: "Contacto" },
+  ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md text-white px-10 py-4 flex justify-between items-center border-b border-neutral-800">
-      {/* LOGO */}
-      <Link href="/">
-        <h1 className="text-xl font-serif tracking-wide cursor-pointer">
-          ShopTecnology
-        </h1>
-      </Link>
+    <nav className="fixed top-0 inset-x-0 z-50 bg-black/70 backdrop-blur-md text-white border-b border-neutral-800">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
+        {/* LOGO */}
+        <Link href="/" onClick={closeMenu}>
+          <h1 className="text-lg sm:text-xl font-serif tracking-wide cursor-pointer">
+            ShopTecnology
+          </h1>
+        </Link>
 
-      {/* ICONO DE MENÚ PARA DISPOSITIVOS MÓVILES */}
-      <div className="lg:hidden">
-        <button onClick={toggleMenu} className="text-white">
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />} {/* Alterna entre el ícono de menú y el de cerrar */}
+        {/* LINKS — desktop */}
+        <ul className="hidden lg:flex items-center gap-8 uppercase text-sm tracking-wider">
+          {links.map(({ href, label }) => (
+            <li
+              key={href}
+              className="hover:underline hover:underline-offset-4 cursor-pointer"
+            >
+              <Link href={href}>{label}</Link>
+            </li>
+          ))}
+
+          {!user ? (
+            <>
+              <li className="hover:underline hover:underline-offset-4 cursor-pointer">
+                <Link href="/login">Login</Link>
+              </li>
+              <li className="hover:text-neutral-300 cursor-pointer">
+                <Link href="/registro">Registro</Link>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="hover:underline hover:underline-offset-4 cursor-pointer">
+                <Link href="/configuracion">Mi cuenta</Link>
+              </li>
+              <li
+                onClick={logout}
+                className="text-red-400 hover:text-red-300 cursor-pointer"
+              >
+                Cerrar Sesión
+              </li>
+            </>
+          )}
+        </ul>
+
+        {/* ICONO DE MENÚ PARA DISPOSITIVOS MÓVILES */}
+        <button
+          onClick={toggleMenu}
+          className="lg:hidden -mr-2 p-2 text-white"
+          aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* LINKS */}
-      <ul className={`lg:flex space-x-10 uppercase text-sm tracking-wider ${isMenuOpen ? "block" : "hidden"} lg:block`}>
-        <li className="hover:underline hover:underline-offset-4 cursor-pointer">
-          <Link href="/">Inicio</Link>
-        </li>
-        <li className="hover:underline hover:underline-offset-4 cursor-pointer">
-          <Link href="/producto">Productos</Link>
-        </li>
-        <li className="hover:underline hover:underline-offset-4 cursor-pointer">
-          <Link href="/nosotros">Sobre Nosotros</Link>
-        </li>
-        <li className="hover:underline hover:underline-offset-4 cursor-pointer">
-          <Link href="/contacto">Contacto</Link>
-        </li>
+      {/* MENÚ DESPLEGABLE — mobile / tablet */}
+      {isMenuOpen && (
+        <div className="lg:hidden border-t border-neutral-800 bg-black/95 backdrop-blur-md px-4 sm:px-6">
+          <ul className="flex flex-col divide-y divide-neutral-800/60 uppercase text-sm tracking-wider">
+            {links.map(({ href, label }) => (
+              <li key={href}>
+                <Link href={href} onClick={closeMenu} className="block py-3.5">
+                  {label}
+                </Link>
+              </li>
+            ))}
 
-        {/* 🔥 AUTENTICACIÓN */}
-        {!user ? (
-          <>
-            <li className="hover:underline hover:underline-offset-4 cursor-pointer">
-              <Link href="/login">Login</Link>
-            </li>
-            <li className="hover:text-neutral-300 cursor-pointer">
-              <Link href="/registro">Registro</Link>
-            </li>
-          </>
-        ) : (
-          <div className="flex items-center space-x-6">
-            <li className="hover:underline hover:underline-offset-4 cursor-pointer">
-              <Link href="/configuracion">Mi cuenta</Link>
-            </li>
-            <li
-              onClick={logout}
-              className="text-red-400 hover:text-red-300 cursor-pointer"
-            >
-              Cerrar Sesión
-            </li>
-          </div>
-        )}
-      </ul>
+            {!user ? (
+              <>
+                <li>
+                  <Link href="/login" onClick={closeMenu} className="block py-3.5">
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/registro" onClick={closeMenu} className="block py-3.5">
+                    Registro
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link href="/configuracion" onClick={closeMenu} className="block py-3.5">
+                    Mi cuenta
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      closeMenu();
+                      logout();
+                    }}
+                    className="w-full text-left py-3.5 text-red-400"
+                  >
+                    Cerrar Sesión
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }

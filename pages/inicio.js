@@ -1,12 +1,10 @@
 // pages/index.js o pages/inicio.js
-import NavBar from "@/components/ui/NavBar";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Footer from "@/components/ui/Footer";
 import delasoftFetch from "@/lib/delasoftClient";
 
 export default function Inicio({ colecciones = [], banners = [], manifesto = null }) {
@@ -131,8 +129,6 @@ export default function Inicio({ colecciones = [], banners = [], manifesto = nul
 
   return (
     <div className="bg-gradient-to-b from-black via-neutral-950 to-black text-neutral-50 min-h-screen flex flex-col">
-      <NavBar />
-
       <main className="flex-1">
         {/* HERO / CAROUSEL */}
         <section className="relative h-[90vh] pt-16 overflow-hidden">
