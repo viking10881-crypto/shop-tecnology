@@ -8,7 +8,7 @@ export default function Home() {
           Bienvenido a
         </p>
 
-        <h1 className="font-serif text-5xl md:text-6xl">
+        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl break-words">
           SHOPTECNOLOGY
         </h1>
 

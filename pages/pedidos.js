@@ -148,7 +148,7 @@ function Pedidos() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 md:px-8 py-8 md:py-10 flex flex-col items-center">
+    <div className="min-h-screen bg-black text-white px-4 md:px-8 pt-24 pb-8 md:pb-10 flex flex-col items-center">
       <div className="w-full max-w-6xl space-y-6">
         {/* Título y resumen */}
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
